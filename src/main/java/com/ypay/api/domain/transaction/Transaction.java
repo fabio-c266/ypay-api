@@ -1,4 +1,4 @@
-package com.ypay.api.domain.transation;
+package com.ypay.api.domain.transaction;
 
 import com.ypay.api.domain.user.User;
 import jakarta.persistence.*;
