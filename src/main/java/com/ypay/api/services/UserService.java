@@ -129,4 +129,9 @@ public class UserService {
         return this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário"));
     }
+
+    public User getById(Long id) throws EntityNotFoundException {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário"));
+    }
 }
