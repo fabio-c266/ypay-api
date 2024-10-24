@@ -1,1 +1,0 @@
-alter table addresses add column user_id BIGINT NOT NULL UNIQUE REFERENCES users(id);
