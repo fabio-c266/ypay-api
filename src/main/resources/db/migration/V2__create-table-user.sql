@@ -8,5 +8,8 @@ create table users(
   cpf CHAR(11) UNIQUE,
   cnpj VARCHAR(19) UNIQUE,
   active BOOLEAN NOT NULL DEFAULT true,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP
+  address_id BIGINT NOT NULL UNIQUE,
+  created_at TIMESTAMP default CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (address_id) REFERENCES addresses(id)
 );
