@@ -1,0 +1,1 @@
+alter table users add column password_hashed VARCHAR(255) NOT NULL;
