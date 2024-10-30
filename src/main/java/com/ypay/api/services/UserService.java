@@ -131,9 +131,6 @@ public class UserService {
 
         BigDecimal userBalanceAfterTransaction = user.getBalance().subtract(amount);
 
-        System.out.println("Valor atual " + user.getBalance());
-        System.out.println("Valor após a transação " + userBalanceAfterTransaction);
-
         if (userBalanceAfterTransaction.compareTo(BigDecimal.ZERO) < 0) {
             throw new ValidationException("Você não tem saldo suficiente");
         }
