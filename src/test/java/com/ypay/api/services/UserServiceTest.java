@@ -6,7 +6,6 @@ import com.ypay.api.domain.user.User;
 import com.ypay.api.domain.user.UserType;
 import com.ypay.api.dtos.CreateAddressDTO;
 import com.ypay.api.dtos.CreateUserDTO;
-import com.ypay.api.dtos.UpdateAddressDTO;
 import com.ypay.api.dtos.UpdateUserDTO;
 import com.ypay.api.infra.exceptions.ConflictException;
 import com.ypay.api.infra.exceptions.DTOEmptyException;
@@ -82,7 +81,7 @@ class UserServiceTest {
         );
 
         Assertions.assertThrows(ValidationException.class, () -> {
-           this.userService.create(userDTO);
+            this.userService.create(userDTO);
         });
     }
 
@@ -157,10 +156,10 @@ class UserServiceTest {
 
         User userCreated = this.userService.create(userDTO);
 
-        UpdateUserDTO updateUserDTO =  new UpdateUserDTO(
-            "The best tester",
-            "teste@gmail.com",
-            "98987765443",
+        UpdateUserDTO updateUserDTO = new UpdateUserDTO(
+                "The best tester",
+                "teste@gmail.com",
+                "98987765443",
                 null
         );
 

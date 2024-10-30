@@ -83,7 +83,7 @@ class AuthServiceTest {
                 "12345678"
         );
 
-        Assertions.assertThrows(InvalidCredentialsException.class,() -> {
+        Assertions.assertThrows(InvalidCredentialsException.class, () -> {
             this.authService.login(loginDTO);
         });
     }
@@ -96,7 +96,7 @@ class AuthServiceTest {
                 "12345678"
         );
 
-        Assertions.assertThrows(InvalidCredentialsException.class,() -> {
+        Assertions.assertThrows(InvalidCredentialsException.class, () -> {
             this.authService.login(loginDTO);
         });
     }

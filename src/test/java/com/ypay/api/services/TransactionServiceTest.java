@@ -13,7 +13,6 @@ import com.ypay.api.infra.exceptions.EntityNotFoundException;
 import com.ypay.api.infra.exceptions.ValidationException;
 import com.ypay.api.repositories.CityRepository;
 import com.ypay.api.repositories.UFRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
