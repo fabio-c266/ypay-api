@@ -1,38 +1,54 @@
 package com.ypay.api.validations;
 
+import java.util.InputMismatchException;
+
 public class CNPJValidation {
-    public static boolean isValid(String cnpj) {
-        int[] firstBaseCnpjNumbersMultipliers = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
-        int[] secondBaseCnpjNumbersMultipliers = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+    public static boolean isValid(String CNPJ) {
+        if (CNPJ.equals("00000000000000") || CNPJ.equals("11111111111111") ||
+                CNPJ.equals("22222222222222") || CNPJ.equals("33333333333333") ||
+                CNPJ.equals("44444444444444") || CNPJ.equals("55555555555555") ||
+                CNPJ.equals("66666666666666") || CNPJ.equals("77777777777777") ||
+                CNPJ.equals("88888888888888") || CNPJ.equals("99999999999999") ||
+                (CNPJ.length() != 14))
+            return(false);
 
-        String firstTwelveNumbersOfCnpj = cnpj.substring(0, 12);
-        int actualFirstVerifier = Character.getNumericValue(cnpj.charAt(12));
-        int actualSecondVerifier = Character.getNumericValue(cnpj.charAt(13));
+        char dig13, dig14;
+        int sm, i, r, num, peso;
 
-        int firstCalculation = calculateCnpjBaseNumbers(firstBaseCnpjNumbersMultipliers, firstTwelveNumbersOfCnpj);
-        int realFirstVerifier = getRealVerifierNumber(firstCalculation);
+        try {
+            sm = 0;
+            peso = 2;
+            for (i=11; i>=0; i--) {
+                num = (int)(CNPJ.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso + 1;
+                if (peso == 10)
+                    peso = 2;
+            }
 
-        if (realFirstVerifier != actualFirstVerifier) {
-            return false;
+            r = sm % 11;
+            if ((r == 0) || (r == 1))
+                dig13 = '0';
+            else dig13 = (char)((11-r) + 48);
+
+            sm = 0;
+            peso = 2;
+            for (i=12; i>=0; i--) {
+                num = (int)(CNPJ.charAt(i)- 48);
+                sm = sm + (num * peso);
+                peso = peso + 1;
+                if (peso == 10)
+                    peso = 2;
+            }
+
+            r = sm % 11;
+            if ((r == 0) || (r == 1))
+                dig14 = '0';
+            else dig14 = (char)((11-r) + 48);
+
+            return (dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13));
+        } catch (InputMismatchException erro) {
+            return(false);
         }
-
-        String firstThirteenNumbersOfCnpj = cnpj.substring(0, 13);
-        int secondCalculation = calculateCnpjBaseNumbers(secondBaseCnpjNumbersMultipliers, firstThirteenNumbersOfCnpj);
-        int realSecondVerifier = getRealVerifierNumber(secondCalculation);
-        return (actualSecondVerifier == realSecondVerifier);
-    }
-
-    private static int calculateCnpjBaseNumbers(int[] multipliers, String cnpjBase) {
-        int sum = 0;
-        for (int i = 0; i < cnpjBase.length(); i++) {
-            int number = Character.getNumericValue(cnpjBase.charAt(i));
-            sum += number * multipliers[i];
-        }
-        return sum;
-    }
-
-    private static int getRealVerifierNumber(int sum) {
-        int remainder = sum % 11;
-        return (remainder < 2) ? 0 : 11 - remainder;
     }
 }
