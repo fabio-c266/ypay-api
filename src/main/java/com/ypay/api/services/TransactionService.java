@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class TransactionService {
     @Autowired
@@ -25,11 +23,6 @@ public class TransactionService {
     @Transactional
     public Transaction transfer(String payerEmail, CreateTransactionDTO createTransactionDTO) throws EntityNotFoundException, ValidationException {
         User payer = this.userService.getByEmail(payerEmail);
-
-        if (payer.getBalance().compareTo(createTransactionDTO.amount()) < 0) {
-            throw new ValidationException("Saldo insuficiente");
-        }
-
         User receive = this.userService.getById(createTransactionDTO.receiveId());
 
         if (payer.getId().equals(receive.getId())) {
@@ -40,6 +33,9 @@ public class TransactionService {
             throw new ValidationException("Usuário inativo no sistema");
         }
 
+        this.userService.removeAmount(payer.getEmail(), createTransactionDTO.amount());
+        this.userService.addAmount(receive.getEmail(), createTransactionDTO.amount());
+
         Transaction newTransaction = new Transaction(
                 null,
                 createTransactionDTO.amount(),
@@ -48,15 +44,7 @@ public class TransactionService {
                 null
         );
 
-        Transaction transactionSaved = this.transactionRepository.save(newTransaction);
-
-        BigDecimal newPayerBalance = payer.getBalance().subtract(createTransactionDTO.amount());
-        BigDecimal newReceiveBalance = receive.getBalance().add(createTransactionDTO.amount());
-
-        payer.setBalance(newPayerBalance);
-        receive.setBalance(newReceiveBalance);
-
-        return transactionSaved;
+        return this.transactionRepository.save(newTransaction);
     }
 
     public Page<Transaction> getAll(String userEmail, Pageable pageable) throws EntityNotFoundException {
