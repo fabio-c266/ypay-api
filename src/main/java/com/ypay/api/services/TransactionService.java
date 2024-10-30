@@ -36,6 +36,10 @@ public class TransactionService {
             throw new ValidationException("Você não pode transferir para si mesmo");
         }
 
+        if (!receive.isActive()) {
+            throw new ValidationException("Usuário inativo no sistema");
+        }
+
         Transaction newTransaction = new Transaction(
                 null,
                 createTransactionDTO.amount(),
