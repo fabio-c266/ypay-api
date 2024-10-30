@@ -9,7 +9,6 @@ import com.ypay.api.infra.exceptions.ConflictException;
 import com.ypay.api.infra.exceptions.DTOEmptyException;
 import com.ypay.api.infra.exceptions.EntityNotFoundException;
 import com.ypay.api.infra.exceptions.ValidationException;
-import com.ypay.api.infra.security.SecurityConfigs;
 import com.ypay.api.repositories.UserRepository;
 import com.ypay.api.validations.CNPJValidation;
 import com.ypay.api.validations.CPFValidation;
@@ -117,6 +116,29 @@ public class UserService {
         }
 
         return user;
+    }
+
+    @Transactional
+    public void addAmount(String userEmail, BigDecimal amount) throws EntityNotFoundException {
+        User user = this.getByEmail(userEmail);
+
+        user.setBalance(user.getBalance().add(amount));
+    }
+
+    @Transactional
+    public void removeAmount(String userEmail, BigDecimal amount) throws EntityNotFoundException, ValidationException {
+        User user = this.getByEmail(userEmail);
+
+        BigDecimal userBalanceAfterTransaction = user.getBalance().subtract(amount);
+
+        System.out.println("Valor atual " + user.getBalance());
+        System.out.println("Valor após a transação " + userBalanceAfterTransaction);
+
+        if (userBalanceAfterTransaction.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidationException("Você não tem saldo suficiente");
+        }
+
+        user.setBalance(userBalanceAfterTransaction);
     }
 
     @Transactional
